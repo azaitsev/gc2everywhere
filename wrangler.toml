@@ -1,0 +1,28 @@
+# Copy this file to wrangler.local.toml and fill in your private resource names/ID.
+name = "gc2everywhere"
+main = "src/worker.py"
+compatibility_date = "2026-10-21"
+compatibility_flags = ["python_workers"]
+workers_dev = false
+preview_urls = false
+
+# The src/ module root prevents local virtualenvs and tests entering the upload.
+
+[triggers]
+crons = ["*/30 * * * *"]
+
+[vars]
+COMMAND = "sync"
+
+# Forwarding only is the default. Uncomment these lines to keep an optional private archive.
+# [[r2_buckets]]
+# binding = "ARCHIVE"
+# bucket_name = "gc2everywhere-archive"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "gc2everywhere-state"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+[observability.logs]
+enabled = true

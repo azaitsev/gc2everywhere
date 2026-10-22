@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gc2everywhere"
+version = "0.1.0"
+description = "Keep your Garmin activity files and send them to services you choose."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+# Publish the existing MIT terms and author in package metadata so installers can inspect them.
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Alex Zaitsev" }]
+keywords = ["garmin", "fit", "activities", "intervals-icu", "effort-signal"]
+classifiers = [
+  "Environment :: Console",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: OS Independent",
+]
+
+# PyPI users need a route to the repository and issue tracker outside the installed wheel.
+[project.urls]
+Repository = "https://github.com/azaitsev/gc2everywhere"
+Issues = "https://github.com/azaitsev/gc2everywhere/issues"
+
+[project.scripts]
+gc2e = "gc2everywhere.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "ruff>=0.11,<1"]
+workers = ["workers-py==1.17.8", "workers-runtime-sdk==1.9.5", "uv>=0.12.3,<0.13"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gc2everywhere"]
+
+# Ship source and reproducible tooling, never developer environments or personal archives.
+# Keep the standalone Worker guide available beside the README link in source distributions.
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src", "/tests", "/README.md", "/CLOUDFLARE_WORKERS.md", "/LICENSE", "/pyproject.toml", "/uv.lock",
+  "/wrangler.toml", "/package.json", "/package-lock.json", "/pylock.toml",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
